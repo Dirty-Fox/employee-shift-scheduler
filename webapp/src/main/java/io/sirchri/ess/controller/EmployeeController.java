@@ -22,12 +22,13 @@
 
 package io.sirchri.ess.controller;
 
-import io.sirchri.ess.model.Employee;
-import io.sirchri.ess.repository.EmployeeRepository;
-import org.springframework.web.bind.annotation.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.sirchri.ess.model.Employee;
+import io.sirchri.ess.repository.EmployeeRepository;
 
 @RestController
 @RequestMapping("/api/employee")
