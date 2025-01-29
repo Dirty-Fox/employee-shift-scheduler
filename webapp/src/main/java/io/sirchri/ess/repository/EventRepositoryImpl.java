@@ -22,6 +22,21 @@
 
 package io.sirchri.ess.repository;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.stereotype.Component;
+
 import io.sirchri.ess.model.Employee;
 import io.sirchri.ess.model.Event;
 import static io.sirchri.ess.repository.specification.EventSpecifications.betweenDatesAndGroups;
@@ -31,21 +46,8 @@ import static io.sirchri.ess.util.EventUtils.eventToVevent;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.component.VEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.stereotype.Component;
 
 /**
  * This class implements a repository for managing Event entities.
@@ -200,9 +202,6 @@ public class EventRepositoryImpl {
             record.put("color", employee.getColor());
             record.put("employee_fullname", employee.getFullname());
         }
-
-        // Add customer name as title if available
-        record.put("title", e.getCustomer() != null ? e.getCustomer().getName() : null);
 
         return record;
     }

@@ -22,27 +22,42 @@
 
 package io.sirchri.ess.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.sirchri.ess.model.lookup.EventType;
-import static io.sirchri.ess.util.EventUtils.eventToRRuleString;
-import static io.sirchri.ess.util.EventUtils.eventToVevent;
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import lombok.Data;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.util.RandomUidGenerator;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.sirchri.ess.model.lookup.EventType;
+import static io.sirchri.ess.util.EventUtils.eventToRRuleString;
+import static io.sirchri.ess.util.EventUtils.eventToVevent;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.Data;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Uid;
+import net.fortuna.ical4j.util.RandomUidGenerator;
 
 @Data
 @Entity
@@ -145,15 +160,6 @@ public class Event implements Serializable, GenericEntity<Event> {
     private String typeFk;
 
     @JsonIgnore    
-    @JoinColumn(name = "customer", insertable = false, updatable = false)
-    @ManyToOne(targetEntity = Customer.class, fetch = FetchType.LAZY)
-    private Customer customer;
-
-    @JsonProperty("customer")
-    @Column(name = "customer")
-    private Long customerFk;
-
-    @JsonIgnore    
     @JoinColumn(name = "employee", insertable = false, updatable = false)
     @ManyToOne(targetEntity = Employee.class, fetch = FetchType.LAZY)
     private Employee employee;
@@ -229,7 +235,6 @@ public class Event implements Serializable, GenericEntity<Event> {
         this.dtStart = source.getDtStart();
         this.dtEnd = source.getDtEnd();
         this.allDay = source.getAllDay();
-        this.customerFk = source.getCustomerFk();
         this.employeeFk = source.getEmployeeFk();
         this.typeFk = source.getTypeFk();
         this.type = source.getType();
@@ -248,7 +253,6 @@ public class Event implements Serializable, GenericEntity<Event> {
         
         //this.parentFk = source.getParentFk();
         this.employee = source.getEmployee();
-        this.customer = source.getCustomer();
         this.parent = source.getParent();
     }
 

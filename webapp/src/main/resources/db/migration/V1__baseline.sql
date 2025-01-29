@@ -404,10 +404,6 @@ CREATE INDEX spring_session_ix3 ON public.spring_session USING btree (principal_
 -- Name: event fk1ro7r56xpfyelrhhvb72a9gn0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.event
-    ADD CONSTRAINT fk1ro7r56xpfyelrhhvb72a9gn0 FOREIGN KEY (customer) REFERENCES public.customer(id);
-
-
 --
 -- Name: event fk35uxlunrytohn655wsecwn8vg; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
